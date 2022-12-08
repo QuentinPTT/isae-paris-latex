@@ -1,0 +1,382 @@
+% Welcome to the package of ISAE-Supméca %
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{isae-supmeca}
+ [2022/12/07 v1.0, latex package to help students and teachers write faster - ISAE-Supméca]
+
+% Importation of all the packages used %
+\RequirePackage{calc}
+\RequirePackage{xcolor}
+\RequirePackage{geometry}
+\RequirePackage{graphicx}
+\RequirePackage{ifthen}
+\RequirePackage{ifpdf}
+\RequirePackage{lmodern}
+\RequirePackage[pagestyles]{titlesec}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage[bitstream-charter]{mathdesign}
+\RequirePackage{parskip}
+
+% Definition of the color used % 
+\definecolor{isae-orange}{RGB}{254,108,45}
+\definecolor{isae-blue}{RGB}{16,31,45}
+\definecolor{theoreme}{rgb}{0.93,0.13,0.23}
+\definecolor{corollaire}{rgb}{0.58,0.16,0.12}
+\definecolor{definition}{rgb}{0.2,0.6,0.86}
+\definecolor{proposition}{rgb}{0.15,0.68,0.38}
+
+% Importation of pdf files %
+\ifpdf
+    \newcommand{\isaefiletcourt}
+        {isae-supmeca_filetcourt.pdf}
+    \let\isaefiletcourtbleuclair\isaefiletcourt
+    \let\isaefiletcourtbleu\isaefiletcourt
+    \newcommand{\isaelogovert}
+    {logo_isae-supmeca_vectoriel.pdf}
+    \newcommand{\isaelogohori}
+    {logo_isae-supmeca_vectoriel.pdf}
+\fi
+
+% Definition of the distance %
+\newlength{\margehaut}
+\setlength{\margehaut}{40mm}
+\newlength{\hauteurentete}
+\setlength{\hauteurentete}{27mm}
+\newlength{\separationentete}
+\setlength{\separationentete}{12mm}
+\newlength{\margecote}
+\setlength{\margecote}{20mm}
+\newlength{\margecoteinterieur}
+\setlength{\margecoteinterieur}{22.5mm}
+\newlength{\margecoteexterieur}
+\setlength{\margecoteexterieur}{17.5mm}
+\newlength{\margebas}
+\setlength{\margebas}{35mm}
+\newlength{\separationpied}
+\setlength{\separationpied}{17.5mm}
+\newlength{\hauteurlogohori}
+\setlength{\hauteurlogohori}{20mm}
+\newlength{\separationentetelogo}
+\setlength{\separationentetelogo}{20mm}
+\newlength{\largeurfiletpiedcentre}
+\setlength{\largeurfiletpiedcentre}{4mm}
+\newlength{\largeurlogovert}
+\setlength{\largeurlogovert}{\paperwidth/\real{7}}
+\newlength{\hauteurlogovert}
+\setlength{\hauteurlogovert}{\largeurlogovert*\real{1.361}}
+\newlength{\largeurlogohori}
+\setlength{\largeurlogohori}{\hauteurlogohori*\real{1.859}}
+\newlength{\largeurtitreentete}
+\setlength{\largeurtitreentete}{\textwidth-\largeurlogohori
+    -\separationentetelogo}
+\newlength{\decalageverticalentete}
+\setlength{\decalageverticalentete}
+    {\hauteurlogohori/\real{2.6}}
+\geometry{
+    top=\margehaut,headheight=\hauteurentete,
+    headsep=\separationentete,
+    bottom=\margebas,footskip=\separationpied
+}
+
+% Definition of the box %
+
+\newtcolorbox{definition}{
+enhanced,
+boxrule=0pt,frame hidden,
+borderline west={4pt}{0pt}{definition},
+sharp corners
+}
+\newtcolorbox{proposition}{
+enhanced,
+boxrule=0pt,frame hidden,
+borderline west={4pt}{0pt}{proposition},
+sharp corners
+}
+\newtcolorbox{theoreme}{
+enhanced,
+boxrule=0pt,frame hidden,
+borderline west={4pt}{0pt}{theoreme},
+sharp corners
+}
+\newtcolorbox{corollaire}{
+enhanced,
+boxrule=0pt,frame hidden,
+borderline west={4pt}{0pt}{corollaire},
+sharp corners
+}
+
+% Declaration of the properties %
+\DeclareOption{a4paper}{
+    \PassOptionsToPackage{a4paper}{geometry}
+}
+\DeclareOption{fancysections}{
+    \AtEndOfPackage{
+    \titleformat{\chapter}
+        [display]
+        {\Huge\bfseries\sffamily}
+        {\LARGE\chaptertitlename{} \thechapter}
+        {0em}
+        {}
+        []
+    \titleformat{\section}
+        [display]
+        {\color{isae-orange}\LARGE\bfseries\sffamily\filcenter}
+        {\thesection}
+        {0em}
+        {\MakeUppercaseWithNewline}
+        [\vspace*{-0.5\baselineskip}%
+            \includegraphics{\isaefiletlongrouge}]
+    \titleformat{\subsection}
+        [block]
+        {\color{isae-orange}\Large\scshape}
+        {\thesubsection}
+        {0.5em}
+        {}
+        [\vspace*{-0.3\baselineskip}%
+            \includegraphics{\isaefiletcourtbleuclair}]
+    \titleformat{\subsubsection}
+        [block]
+        {\color{isae-orange}\large\scshape}
+        {\thesubsubsection}
+        {0.5em}
+        {\textbullet{} }
+        []
+    }
+}
+\DeclareOption{titlepage}{
+        \renewcommand*{\maketitle}{
+            \titlepagelayout{}
+    }
+}
+\DeclareOption{oneside}{
+    \AtEndOfPackage{
+        \geometry{inner=\margecote,outer=\margecote}
+    }
+}
+\DeclareOption{twoside}{
+    \AtEndOfPackage{
+        \geometry{inner=\margecoteinterieur,
+            outer=\margecoteexterieur}
+    }
+}
+\DeclareOption{sectionmark}{
+    \AtEndOfPackage{
+        \renewcommand{\enteteexterieur}[1]{
+            \ifthesection{
+                    {\scshape\color{isae-orange}
+                        \thesection{}.~\sectiontitle}
+            }{
+            }
+        }
+    }
+}
+\DeclareOption{chaptermark}{
+    \AtEndOfPackage{
+        \renewcommand{\enteteexterieur}[1]{
+            \ifthechapter{
+                     {\scshape\color{isae-orange}
+                         \thechapter{}.~\chaptertitle}
+            }{
+
+            }
+        }
+    }
+}
+\DeclareOption{markboth}{
+    \AtEndOfPackage{
+        \renewcommand{\enteteexterieurimpair}{
+            \ifthesection{
+                    {\scshape\color{isae-orange}
+                        \thesection{}.~\sectiontitle}
+            }{
+
+            }
+        }
+        \renewcommand{\enteteexterieurpair}{
+            \ifthechapter{
+                    {\scshape\color{isae-orange}
+                        \thechapter{}.~\chaptertitle}
+            }{
+
+            }
+        }
+        
+    }
+}
+\DeclareOption{pagenumber}{
+    \AtEndOfPackage{
+        \RequirePackage{lastpage}
+        \renewcommand{\piedcentre}{
+            \setlength{\largeurfiletpiedcentre}
+                {2\largeurfiletpiedcentre}
+            \color[HTML]{FE6C2D}{\shortstack[c]{
+                \rule{\largeurfiletpiedcentre}{0.3mm}\\
+                \thepage/\pageref{LastPage}}}
+        }
+    }
+}
+\newif\ifgrandesmarges
+\grandesmargesfalse
+\DeclareOption*{
+    \PassOptionsToPackage{\CurrentOption}{geometry}
+}
+\@ifclassloaded{book}{
+    \ExecuteOptions{titlepage}
+}{}
+\@ifclassloaded{report}{
+    \ExecuteOptions{titlepage}
+}{}
+\ExecuteOptions{a4paper,oneside}
+\ProcessOptions*
+
+\newcommand{\cadre}[3]{
+    \begin{#1}
+        \textbf{\textcolor{#1}{#2}}
+        \\
+        \textcolor{isae-blue}{#3}
+    \end{#1}
+}
+
+
+\newcommand{\piedcentre}{
+    \textcolor{isae-orange}{\shortstack[c]
+        {\rule{\largeurfiletpiedcentre}{0.3mm}\\\thepage}}
+}
+\newcommand{\enteteexterieur}[1]{
+        {\begin{minipage}[b]{\largeurtitreentete}
+            \scshape#1\textcolor{isae-orange}
+            \isaetitrecourtsave
+        \end{minipage}}
+}
+\newcommand{\enteteinterieur}[2][isae-orange]{
+    {%
+        \color{#1}%
+        \includegraphics[height=\hauteurlogohori,width=2\largeurlogohori,keepaspectratio]{#2}%
+    }%
+}
+\newcommand{\enteteexterieurpair}{
+    \enteteexterieur{\flushright}
+}
+\newcommand{\enteteexterieurimpair}{
+    \enteteexterieur{}
+}
+\newcommand{\enteteinterieurpair}{
+    \enteteinterieur{\isaelogohori}
+}
+\newcommand{\enteteinterieurimpair}{
+    \enteteinterieur{\isaelogohori}
+}
+\newcommand{\entetes}{
+    \newpagestyle{isaetechnique}{
+    \sethead[\raisebox{.5\hauteurlogohori}{\raisebox{-0.5\height}{\enteteinterieurpair}}]% left even
+            []% center even
+            [\raisebox{.5\hauteurlogohori}{\raisebox{-0.5\height}{\enteteexterieurpair}}]% right even
+            {\raisebox{.5\hauteurlogohori}{\raisebox{-0.5\height}{\enteteexterieurimpair}}}% left odd
+            {}% center odd
+            {\raisebox{.5\hauteurlogohori}{\raisebox{-0.5\height}{\enteteinterieurimpair}}}% right odd
+    \setfoot{}% left odd
+             {\piedcentre}% center odd
+             {}% right odd
+    }
+    \pagestyle{isaetechnique}
+}
+\renewpagestyle{plain}{
+    \sethead{}% left
+            {}% center
+            {}% right
+    \setfoot{}% left
+            {\piedcentre}% center
+            {}% right
+}
+\pagestyle{plain}
+\newboolean{subtitle}\setboolean{subtitle}{false}
+\newcommand{\isaesoustitresave}{}
+\def\subtitle{}
+\renewcommand*{\subtitle}[1]{
+    \renewcommand*{\isaesoustitresave}{#1}
+    \setboolean{subtitle}{true}
+}
+\newcommand{\isaetitresave}{}
+\newcommand{\isaetitrecourtsave}{}
+\renewcommand*{\title}[2][{}]{
+    \renewcommand*{\isaetitresave}{#2}
+    \ifthenelse{\equal{#1}{}}{
+        \renewcommand*{\isaetitrecourtsave}{#2}
+    }{
+        \renewcommand*{\isaetitrecourtsave}{#1}
+    }
+    \entetes
+}
+\newcommand{\isaeauthorsave}{}
+\renewcommand*{\author}[1]{
+    \renewcommand*{\isaeauthorsave}{#1}
+}
+\newcommand{\isaedatesave}{\today}
+\renewcommand*{\date}[1]{
+    \renewcommand*{\isaedatesave}{#1}
+}
+
+\newcommand{\logo}[2][{}]{
+    \ifthenelse{\equal{#1}{headers}}{
+        \renewcommand{\enteteinterieurimpair}{
+            \enteteinterieur{#2}
+        }
+    }{}
+    \renewcommand{\titlepagebottomline}{
+     \begin{minipage}{5\largeurlogohori}
+         \centering
+         \raisebox{-0.5\height}{
+                \includegraphics[width=1.5\largeurlogohori]
+                    {\isaelogohori}
+            }
+            \hspace{0.25\largeurlogohori}
+            \raisebox{-0.5\height}{
+                \includegraphics[height=\hauteurlogovert,
+                    width=1.5\largeurlogohori,
+                    keepaspectratio]{#2}
+            }
+        \end{minipage}
+    }
+}
+
+\newcommand{\titlepagebottomline}{
+\includegraphics[height=15em]{\isaelogovert}
+}
+
+
+% Display of the cover page %
+\newcommand{\titlepagelayout}{
+        \vspace{1em}
+        \begin{center}
+            \titlepagebottomline{}\\
+            \vspace{4em}
+            \Huge\bfseries\color{isae-blue}
+            \rule{\textwidth}{1.2pt}\vspace{0.6em}
+            {  \color{isae-orange}\MakeUppercaseWithNewline{\isaetitresave}}\\
+            \color{isae-blue}\vspace{0.1em}\rule{\textwidth}{1.2pt}\\
+            \vspace{1em}
+            \color{isae-orange}\Large\hspace{0cm}\isaesoustitresave\\
+            \vspace{9em}
+            \color{isae-blue}\includegraphics{\isaefiletcourtbleu}
+            \\[0.4\baselineskip]
+            \hspace{0cm}\isaeauthorsave\\[\fill]
+        \end{center}
+        \thispagestyle{empty}
+        \setcounter{page}{0}
+        \clearpage
+}
+
+% Allow to upper case the title %
+\newcommand{\MakeUppercaseWithNewline}[1]{
+      \begingroup
+        \let\SavedOrgNewline\\%
+        \DeclareRobustCommand{\\}{\SavedOrgNewline}%
+        \MakeUppercase{#1}%
+    \endgroup
+}
+
+% Other changes %
+\color{isae-blue}
+\renewcommand{\chaptername}{Chapitre}
+
+\endinput
