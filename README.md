@@ -2,7 +2,7 @@
 
 ![LaTeX](https://img.shields.io/badge/latex-%23008080.svg?style=for-the-badge&logo=latex&logoColor=white)
 
-A package Latex including beamer and book type templates
+The Latex package for ISAE-Supméca simplifies the process of writing documents by providing a set of convenient commands and features for formatting and structuring your documents. The package includes templates for common document types such as beamer presentation and theses, as well as creating figures and tables. With this package, you can quickly and easily create professional-looking documents that meet the school's presentation standards.
 
 <br/>
 
